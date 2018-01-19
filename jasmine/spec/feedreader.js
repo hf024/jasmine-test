@@ -15,7 +15,14 @@ $(function() {
          * 不是空的。在你开始做这个项目剩下的工作之前最好实验一下这个测试
          * 比如你把 app.js 里面的 allFeeds 变量变成一个空的数组然后刷新
          * 页面看看会发生什么。
-        */
+		*/
+		function checkFeedAttribute(field) {
+			allFeeds.forEach(function(feed) {
+				expect(feed[field]).toBeDefined();
+				expect(feed[field].replace(/\s/g, '').length).not.toBe(0);
+			})
+		}
+
         it('are defined', function() {
             expect(allFeeds).toBeDefined();
             expect(allFeeds.length).not.toBe(0);
@@ -26,10 +33,7 @@ $(function() {
          * 编写一个测试遍历 allFeeds 对象里面的所有的源来保证有链接字段而且链接不是空的。
          */
 		it('every feed has a non-empty url', function() {
-			allFeeds.forEach(function(feed) {
-				expect(feed.url).toBeDefined();
-				expect(feed.url.replace(/\s/g, '').length).not.toBe(0);
-			})
+			checkFeedAttribute('url')
 		});
 
 
@@ -37,10 +41,7 @@ $(function() {
          * 编写一个测试遍历 allFeeds 对象里面的所有的源来保证有名字字段而且不是空的。
          */
 		it('every feed has a non-empty name', function() {
-			allFeeds.forEach(function(feed) {
-				expect(feed.name).toBeDefined();
-				expect(feed.name.replace(/\s/g, '').length).not.toBe(0);
-			})
+			checkFeedAttribute('name')
 		});
     });
 
@@ -58,7 +59,7 @@ $(function() {
          * 来搞清楚我们是怎么实现隐藏/展示菜单元素的。
          */
 		it('The menu is hidden by default', function() {
-			expect($body.hasClass('menu-hidden')).toBeTruthy();
+			expect($body.hasClass('menu-hidden')).toBe(true);
 		});
 
          /* TODO:
@@ -69,10 +70,10 @@ $(function() {
 		it('The menu can be changed between hidden and display by click', function() {
 			var $menuIconLink = $('.menu-icon-link');
 			$menuIconLink.trigger('click');
-			expect($body.hasClass('menu-hidden')).toBeFalsy();
+			expect($body.hasClass('menu-hidden')).toBe(false);
 
 			$menuIconLink.trigger('click');
-			expect($body.hasClass('menu-hidden')).toBeTruthy();
+			expect($body.hasClass('menu-hidden')).toBe(true)
 		});
 	});
 
@@ -89,9 +90,8 @@ $(function() {
          * 记住 loadFeed() 函数是异步的所以这个而是应该使用 Jasmine 的 beforeEach
          * 和异步的 done() 函数。
          */
-		it('The loadFeed function has runned successfully', function(done) {
-			expect($('.feed .entry').length > 0).toBeTruthy();
-			done();
+		it('The loadFeed function has runned successfully', function() {
+			expect($('.feed .entry').length > 0).toBe(true);
 		})
 	});
 
@@ -110,9 +110,8 @@ $(function() {
 				});
 			})
         });
-        it('new feed content will change', function (done) {
+        it('new feed content will change', function () {
             expect(oldContent).not.toBe($('.feed').text());
-            done();
 		});
 	});
 }());
